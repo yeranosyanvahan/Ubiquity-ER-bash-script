@@ -1,0 +1,26 @@
+#!/bin/bash
+
+ls /opt/vyatta/config/active/firewall/group/address-group > ./tmp/tmp.txt
+cat ./Data/ID.tariff  | cut -d ':' -f 2- > ./tmp/tmp1.txt
+
+cat ./tmp/tmp.txt | grep $1 | sort > ./tmp/sorted.txt
+cat ./tmp/tmp1.txt | grep $1 | sort > ./tmp/sorted1.txt
+
+lines=`cat ./tmp/sorted.txt`
+for line in $lines; do
+	if test $line = $1 ; then
+	echo 1	
+	exit
+	fi
+done
+
+lines=`cat ./tmp/sorted1.txt`
+for line in $lines; do
+	if test $line = $1 ; then
+	echo 1	
+	exit 
+	fi
+done
+
+echo 0
+
