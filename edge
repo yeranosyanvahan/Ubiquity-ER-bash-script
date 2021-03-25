@@ -50,9 +50,9 @@ echo -e $description '\n'$4 $5 > input.txt
 user=admin
 ip=192.168.168.1
 key=./key
-file="configure configure.vbash setup.vbash Data tmp input.txt"
+file="configure.vbash setup.vbash Data tmp input.txt"
 scp -i $key -r $file $user@$ip:~
 ssh -q $user@$ip -i $key vbash setup.vbash
-ssh -q $user@$ip -i $key rm setup.vbash
-
+ssh -q $user@$ip -i $key rm $file
+rm configure.vbash
 
