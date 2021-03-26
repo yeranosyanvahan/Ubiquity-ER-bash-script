@@ -3,15 +3,10 @@
 
 
 #INPUT
-read description < ./input.txt
-cat ./input.txt | tail -1 > ./tmp/tmp.txt
-read ip < ./tmp/tmp.txt
-
+read ip < ./input.txt
 
 
 set="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
-
-
 
 
 $set begin
