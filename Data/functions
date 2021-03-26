@@ -23,5 +23,5 @@ edge [add/delete] [tariff]   [tariff plan name] [UP] [DOWN]
 
 
 "
-exit
+exit 1
 }
