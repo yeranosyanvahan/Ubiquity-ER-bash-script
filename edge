@@ -6,6 +6,12 @@ source ./Data/functions
 #test for the valid imput
 bash ./Data/test.bash $@
 
+if (test $? -eg 1);
+
+then 
+ exit 1
+fi
+
 
 description=$3
 tmp=$(echo ${description// /_})
