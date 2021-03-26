@@ -1,40 +1,12 @@
 #!/bin/bash                                                                     
-cd ./edge                                                                       
-#import functions                                                               
-source ./Data/functions                                                         
-                 
-if test -z "$1"  || test -z "$2"  || test -z "$3"; then
-help             
-fi                     
+cd ./edge     
+ 
+#import functions
+source ./Data/functions
 
-if test "$1" != "add" && test "$1" != "delete" || (test "$2" != "tariff" && test "$2" != "customer"); then
-help
-fi
-
-                                                                                                          
-if test "$2" = "customer" && ! valid_ip $4; then
-  
-echo "Invalid IP address $4 for tariff plan $3"
-echo "If you want tariff plan to be $3 $4 use quotes: \"$3 $4\""
-exit 1                                          
-
-fi                                             
-                                                                
-if test "$2" = "tariff"  && test "$1" = "add" && $(! [[ "$4" =~ ^[0-9]+$ ]] || ! [[ "$5" =~ ^[0-9]+$ ]]); then
-
-echo "Invalid Download speed $4 mbit and Upload speed $5 mbit"
-exit 1
-fi                                                                                                            
-
-if test "$2" = "customer" && ! test -z "$5" || ! test -z "$6" ; then
-echo -e "\ntoo many arguments entered\n"
-exit 1
-fi
-                                                                    
-if test "$2" = "tariff" && test "$1" = "delete" && ! test -z "$4"  ; then
-echo -e "\ntoo many arguments entered\n"
-exit 1
-fi
+#test for the valid imput
+bash ./Data/test $@
+ 
 description=$3                                                           
 tmp=$(echo ${description// /_})         
 description=$tmp
