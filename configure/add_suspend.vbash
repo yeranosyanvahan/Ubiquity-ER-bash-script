@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+
+#INPUT
+read description < ./input.txt
+cat ./input.txt | tail -1 > ./tmp/tmp.txt
+read ip < ./tmp/tmp.txt
+
+
+
+set="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
+
+
+
+
+$set begin
+$set set service suspend user-ip $ip
+$set commit
+$set discard
+$set end
+
