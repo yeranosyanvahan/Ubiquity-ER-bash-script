@@ -2,6 +2,8 @@
 
 #import functions
 source ./Data/functions
+
+#test for the valid imput
 bash ./Data/test $@
 
 
@@ -24,6 +26,6 @@ port=22
 file="configure.vbash setup.vbash Data tmp input.txt"
 scp -P $port -i $key -r $file $user@$ip:~
 ssh -p $port -q $user@$ip -i $key vbash setup.vbash
-ssh -p $port -q $user@$ip -i $key rm $file
+ssh -p $port -q $user@$ip -i $key rm -r $file
 rm configure.vbash
 

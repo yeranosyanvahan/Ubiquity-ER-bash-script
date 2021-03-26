@@ -1,4 +1,6 @@
 
+source ./Data/functions
+
 if test -z "$1"  || test -z "$2"  || test -z "$3"; then 
 help
 fi
