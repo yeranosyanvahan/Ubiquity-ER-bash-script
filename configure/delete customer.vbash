@@ -1,0 +1,21 @@
+
+#TEST IF EXISTS
+
+ls /opt/vyatta/config/active/firewall/group/address-group > ./tmp/tmp.txt
+if test ! "$(cat ./tmp/tmp.txt | grep $TARIFF | sort | head -1)" = "$TARIFF";then
+echo -e "\nthe tariff $TARIFF does not exist\n"
+exit 1
+fi
+
+cat /opt/vyatta/config/active/firewall/group/address-group/$TARIFF/address/node.val > ./tmp/tmp.txt
+if test ! "$(cat ./tmp/tmp.txt | grep $IP | head -1)" = "$IP";then
+echo -e "\nthe address $IP does not exist\n"
+exit 1
+fi
+
+
+$begin
+$delete firewall group address-group $TARIFF address $IP
+$commit
+$discard
+$end

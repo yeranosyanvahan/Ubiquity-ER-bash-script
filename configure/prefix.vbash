@@ -1,0 +1,8 @@
+#!/bin/vbash
+
+set="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper set"
+delete="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper delete"
+begin="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper begin"
+end="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper end"
+discard="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper discard"
+commit="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper commit"

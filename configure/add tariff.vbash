@@ -1,0 +1,116 @@
+
+if test "$(bash ./Data/groups.vbash $TARIFF)" = "1"
+then
+echo -e "\nthe tariff $TARIFF already exists\n"
+exit 1
+fi
+#getting the IDS
+
+#unique number of "queue filter rule mark WAN_ID rule"
+bash ./Data/ID.bash 3 4 2 2 2
+read id1 id2 id3 fid1 fid2 fid3 fid4 rule1 rule2 mark1 mark2 wrule1 wrule2 <./Data/ID.txt
+echo "$(cat ./Data/ID.txt) Description:$TARIFF" >> ./Data/ID.tariff
+#start configuring
+set="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
+
+
+$begin
+
+#root
+$set traffic-control advanced-queue root queue 1
+
+$set traffic-control advanced-queue root queue 1 attach-to global
+$set traffic-control advanced-queue root queue 1 bandwidth 10000mbit
+
+$set traffic-control advanced-queue root queue 1 description Router
+
+$commit
+$discard
+
+#branch
+$set traffic-control advanced-queue branch queue $id1
+
+$set traffic-control advanced-queue branch queue $id1 bandwidth 1000mbit
+$set traffic-control advanced-queue branch queue $id1 parent 1
+
+#leafs
+$set traffic-control advanced-queue leaf queue $id2
+$set traffic-control advanced-queue leaf queue $id3
+
+$set traffic-control advanced-queue leaf queue $id3 bandwidth ""$DOWN""mbit""
+$set traffic-control advanced-queue leaf queue $id3 parent $id1
+
+$set traffic-control advanced-queue leaf queue $id2 bandwidth ""$UP""mbit""
+$set traffic-control advanced-queue leaf queue $id2 parent $id1
+
+
+#add filters
+$set traffic-control advanced-queue filters match $fid1
+$set traffic-control advanced-queue filters match $fid2
+
+$set traffic-control advanced-queue filters match $fid1 attach-to 1
+$set traffic-control advanced-queue filters match $fid2 attach-to 1
+$set traffic-control advanced-queue filters match $fid3 attach-to $id1
+$set traffic-control advanced-queue filters match $fid4 attach-to $id1
+
+$set traffic-control advanced-queue filters match $fid1 target $id1
+$set traffic-control advanced-queue filters match $fid2 target $id1
+$set traffic-control advanced-queue filters match $fid3 target $id3
+$set traffic-control advanced-queue filters match $fid4 target $id2
+
+#catching marked filters
+
+$set traffic-control advanced-queue filters match $fid1 mark $mark1
+$set traffic-control advanced-queue filters match $fid2 mark $mark2
+$set traffic-control advanced-queue filters match $fid3 mark $mark1
+$set traffic-control advanced-queue filters match $fid4 mark $mark2
+
+
+#firewall
+$set firewall group address-group $TARIFF
+$set firewall name $WAN
+$set firewall name $WAN rule $wrule1
+$set firewall name $WAN rule $wrule2
+
+$set firewall name $WAN rule $wrule1 action accept
+$set firewall name $WAN rule $wrule2 action accept
+
+$set firewall name $WAN rule $wrule1 action accept
+$set firewall name $WAN rule $wrule2 action accept
+
+$set firewall name $WAN rule $wrule1 destination group address-group $TARIFF
+$set firewall name $WAN rule $wrule2 source group address-group $TARIFF
+
+#mark
+$set firewall modify Modify rule $rule1 action modify
+$set firewall modify Modify rule $rule1 modify mark $mark1
+
+$set firewall modify Modify rule $rule2 action modify
+$set firewall modify Modify rule $rule2 modify mark $mark2
+
+$set firewall modify Modify rule $rule1 destination group address-group $TARIFF
+$set firewall modify Modify rule $rule2 source group address-group $TARIFF
+
+
+
+#description
+$set traffic-control advanced-queue branch queue $id1 description $TARIFF
+
+
+$set traffic-control advanced-queue leaf queue $id2 description ""$TARIFF""_DOWN""
+$set traffic-control advanced-queue leaf queue $id3 description ""$TARIFF""_UP""
+
+
+$set traffic-control advanced-queue filters match $fid1 description $TARIFF
+$set traffic-control advanced-queue filters match $fid2 description $TARIFF
+$set traffic-control advanced-queue filters match $fid3 description $TARIFF
+$set traffic-control advanced-queue filters match $fid4 description $TARIFF
+
+
+$set firewall modify Modify rule $rule1 description $TARIFF
+$set firewall modify Modify rule $rule2 description $TARIFF
+
+$commit
+$discard
+$end
+

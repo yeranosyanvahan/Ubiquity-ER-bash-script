@@ -1,0 +1,8 @@
+
+
+$begin
+$set service suspend user-ip $IP
+$commit
+$discard
+$end
+
