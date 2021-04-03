@@ -1,6 +1,6 @@
 #!/bin/bash
-cat ./Data/values | head -2 | tail -1 > ./tmp/wan
-read WAN < ./tmp/wan
+WAN=${@: -1}
+
 getid () {
 #sort
 sort -n ./tmp/$1 > /tmp/tmp.txt

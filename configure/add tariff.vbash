@@ -7,11 +7,9 @@ fi
 #getting the IDS
 
 #unique number of "queue filter rule mark WAN_ID rule"
-bash ./Data/ID.bash 3 4 2 2 2
+bash ./Data/ID.bash 3 4 2 2 2 $WAN
 read id1 id2 id3 fid1 fid2 fid3 fid4 rule1 rule2 mark1 mark2 wrule1 wrule2 <./Data/ID.txt
 echo "$(cat ./Data/ID.txt) Description:$TARIFF" >> ./Data/ID.tariff
-#start configuring
-set="/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper"
 
 
 $begin
