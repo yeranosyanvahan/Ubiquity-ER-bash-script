@@ -31,7 +31,7 @@ def Checker(Arguments,Script,Dynamic_Argument):
         return False
     for Some in zip(Arguments,Script):
         if(Some[1] in Dynamic_Argument):
-            if (not eval(f"""{Some[1]}_check("{Some[0]}")""")):
+            if (not eval("""{}_check("{}")""".format(Some[0],Some[1]))):
                 return False
         elif(Some[0]!=Some[1]):
             return False
